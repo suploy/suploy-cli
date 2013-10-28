@@ -3,12 +3,13 @@ Feature: Deploy a repository
   As a regular user
   I want to deploy my webapp
 
-  Scenario: Init Repository from command line
-    Given I am in a git repository
-    When I enter "./suploy init"
-    Then I have a new git remote pointing to the suploy server
-
   Scenario: Upload repository from command line
     Given I am in my project repository
     When I enter "git push suploy master"
     Then I see the url of the deployed app
+
+  Scenario: Deploying from command line not working
+    Given I am in my project repository
+    When I enter "git push suploy master"
+    And the build on the server fails
+    Then I see the error message
