@@ -1,0 +1,5 @@
+= suploy
+
+Generate this with
+    suploy rdoc
+After you have described your command line interface
