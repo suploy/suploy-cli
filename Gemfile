@@ -3,3 +3,4 @@ gemspec
 
 gem 'httparty'
 gem 'highline'
+gem 'rugged'
