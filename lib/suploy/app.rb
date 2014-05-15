@@ -1,5 +1,3 @@
-require 'rugged'
-
 module Suploy
   class App
     def self.init

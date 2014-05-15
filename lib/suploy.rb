@@ -1,2 +1,5 @@
-require_relative 'suploy/version'
-require_relative 'suploy/app.rb'
+module Suploy
+  require 'rugged'
+  require 'suploy/version'
+  require 'suploy/app'
+end
