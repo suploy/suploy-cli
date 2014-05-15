@@ -1,6 +1,5 @@
 # Ensure we require the local version and not one we might have installed already
 require File.join([File.dirname(__FILE__),'lib','suploy','version.rb'])
-require 'suploy/version'
 
 spec = Gem::Specification.new do |s| 
   s.name = 'suploy'

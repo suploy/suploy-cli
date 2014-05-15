@@ -50,33 +50,24 @@ desc 'Describe login here'
 arg_name 'Describe arguments to login here'
 command :login do |c|
   c.action do |global_options,options,args|
-    require "highline/import"
-    puts "Provide your email and password to login."
-    email = ask("Enter your email:")
-    password = ask("Enter your password:") { |q| q.echo = "x" }
-
-    puts "#{email}:#{password}"
+    request_credentials =
   end
 end
 
 pre do |global,command,options,args|
-  # Pre logic here
-  # Return true to proceed; false to abort and not call the
-  # chosen command
-  # Use skips_pre before a command to skip this block
-  # on that command only
+  commands_requiring_auth = ['key', 'init']
+  parent_most_command = command.name_for_help[0]
+  if commands_requiring_auth.include? parent_most_command
+    puts "Requires Authentication!"
+    # authenticate with api
+  end
   true
 end
 
 post do |global,command,options,args|
-  # Post logic here
-  # Use skips_post before a command to skip this
-  # block on that command only
 end
 
 on_error do |exception|
-  # Error logic here
-  # return false to skip default error handling
   true
 end
 
