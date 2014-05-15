@@ -1,2 +1,2 @@
 require_relative 'suploy/version'
-require_relative 'suploy/repository.rb'
+require_relative 'suploy/app.rb'
