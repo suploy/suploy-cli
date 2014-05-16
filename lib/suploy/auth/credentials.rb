@@ -10,8 +10,8 @@ module Suploy
       end
 
       def save
-        netrc = Netrc.read
-        netrc[Suploy::Config.host] = user, token
+        netrc = Suploy::Auth::Credentials.netrc
+        netrc[Suploy::Api.url] = email, token
         netrc.save
       end
 
@@ -27,9 +27,13 @@ module Suploy
         !token.nil? && !token.empty?
       end
 
+      def self.netrc
+        default = Netrc.default_path
+        @netrc ||= Netrc.read default
+      end
+
       def self.from_netrc
-        netrc = Netrc.read
-        email, token = netrc[Suploy::Config.host]
+        email, token = netrc[Suploy::Api.url]
         credentials = Credentials.new email, token
         if credentials.meet_requirements?
           credentials

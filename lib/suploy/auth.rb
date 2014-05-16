@@ -1,25 +1,24 @@
 module Suploy
-  class Auth
+  module Auth
     def login
-      request_credentials
+      ask_for_and_save_credentials
       puts "Authentication successful."
     end
 
-    def request_credentials
-      credentials = read_credentials_form_stdin
+    def ask_for_and_save_credentials
+      credentials = ask_for_credentials
       token = retrieve_token_from_api credentials[:email], credentials[:password]
-      puts "Token: #{token}"
       if token
-        @credentials = Suploy::Auth::Credentials.new email, token
+        @credentials = Suploy::Auth::Credentials.new credentials[:email], token
         @credentials.save
         @credentials
       else
         puts "Authentication unsuccessful."
-        request_credentials
+        ask_for_and_save_credentials
       end
     end
 
-    def read_credentials_form_stdin
+    def ask_for_credentials
       puts "Enter your Suploy credentials."
       print "Email: "
       email = ask ""
@@ -31,16 +30,18 @@ module Suploy
     end
 
     def retrieve_token_from_api(email, password)
-      response = SuployApi.authenticate(email, password)
-      if response.status == 204
-        response[:token]
-      end
+      response = Suploy::Api::Credentials.login(email, password)
+      response.info["user_token"]
     end
 
     def get_credentials
       @credentials ||= Suploy::Auth::Credentials.from_netrc
-      @credentials ||= request_credentials
+      @credentials ||= ask_for_and_save_credentials
       @credentials
     end
+
+    module_function :login, :ask_for_and_save_credentials,
+    :ask_for_credentials, :retrieve_token_from_api,
+    :get_credentials
   end
 end

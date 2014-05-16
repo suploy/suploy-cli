@@ -15,6 +15,8 @@ program_desc 'Describe your application here'
 
 version Suploy::VERSION
 
+Suploy::Api.url = 'http://192.168.0.20:3000'
+
 desc 'Manage your SSH Keys'
 command :key do |c|
   c.arg_name '[key-name] [key-file]'
@@ -22,18 +24,47 @@ command :key do |c|
   c.command :add do |add|
     add.action do |global_options,options,args|
       key_name = args[0]
+      key_name ||= 'noname'
       key_file = args[1]
       key_file ||= '~/.ssh/id_rsa.pub'
       key_file = File.expand_path(key_file)
       if File.file? key_file
         puts "Adding key-file '#{key_file}' ..."
         file = File.open(key_file, 'rb')
-        puts file.read
-        # add suploy api call to actually add the key
+        Suploy::Api::SshKey.create key_name, file.read
         file.close
+        puts "Done"
       else
         puts "Key-file '#{key_file}' does not exist"
       end
+    end
+  end
+
+  c.desc 'List all your SSH Keys added to your account'
+  c.command :list do |add|
+    add.action do |global_options,options,args|
+      ssh_keys = Suploy::Api::SshKey.index
+      table = Terminal::Table.new do |t|
+        t << ['Name', 'Fingerprint']
+        t.add_separator
+        ssh_keys.each do |k|
+          t << [k.info["title"], k.info["fingerprint"]]
+        end
+      end
+      puts table
+    end
+  end
+
+  c.arg_name 'key-name'
+  c.desc 'Remove a previously added SSH Key from your suploy account'
+  c.command :rm do |add|
+    add.action do |global_options,options,args|
+      key_name = args[0]
+      puts "Remove key '#{key_name}' ..."
+      ssh_key = Suploy::Api::SshKey.get key_name
+      puts "test"
+      ssh_key.remove
+      puts "Done"
     end
   end
 end
@@ -50,7 +81,7 @@ desc 'Describe login here'
 arg_name 'Describe arguments to login here'
 command :login do |c|
   c.action do |global_options,options,args|
-    request_credentials =
+    Suploy::Auth.ask_for_and_save_credentials
   end
 end
 
@@ -58,8 +89,8 @@ pre do |global,command,options,args|
   commands_requiring_auth = ['key', 'init']
   parent_most_command = command.name_for_help[0]
   if commands_requiring_auth.include? parent_most_command
-    puts "Requires Authentication!"
-    # authenticate with api
+    token = Suploy::Auth.get_credentials.token
+    Suploy::Api.authorization token
   end
   true
 end
