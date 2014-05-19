@@ -15,8 +15,6 @@ program_desc 'Describe your application here'
 
 version Suploy::VERSION
 
-Suploy::Api.url = 'http://192.168.0.20:3000'
-
 desc 'Manage your SSH Keys'
 command :key do |c|
   c.arg_name '[key-name] [key-file]'
@@ -93,6 +91,9 @@ command :login do |c|
 end
 
 pre do |global,command,options,args|
+  Suploy::Config.load
+  Suploy::Api.url = Suploy::Config.url
+
   commands_requiring_auth = ['key', 'init']
   parent_most_command = command.topmost_ancestor.names
   if commands_requiring_auth.include? parent_most_command

@@ -6,7 +6,7 @@ module Suploy
     end
 
     def ask_for_and_save_credentials
-      credentials = ask_for_credentials
+      credentials = Suploy::Util::Ask.ask_for_credentials
       token = retrieve_token_from_api credentials[:email], credentials[:password]
       if token
         @credentials = Suploy::Auth::Credentials.new credentials[:email], token
@@ -16,17 +16,6 @@ module Suploy
         puts "Authentication unsuccessful."
         ask_for_and_save_credentials
       end
-    end
-
-    def ask_for_credentials
-      puts "Enter your Suploy credentials."
-      print "Email: "
-      email = ask ""
-      print "Password (typing will be hidden): "
-      password = ask "" do |q|
-        q.echo = false
-      end
-      {email: email, password: password}
     end
 
     def retrieve_token_from_api(email, password)
@@ -41,7 +30,6 @@ module Suploy
     end
 
     module_function :login, :ask_for_and_save_credentials,
-    :ask_for_credentials, :retrieve_token_from_api,
-    :get_credentials
+    :retrieve_token_from_api, :get_credentials
   end
 end
