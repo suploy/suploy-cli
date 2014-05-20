@@ -38,6 +38,8 @@ module Suploy
       repo = current_git_repo
       remote = 'suploy'
       Rugged::Remote.add(repo, remote, git_url)
+    rescue Rugged::ConfigError
+      raise RemoteAlreadyExists.new, "Remote 'suploy' already exists."
     end
 
     def current_git_repo
