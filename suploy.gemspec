@@ -27,5 +27,4 @@ spec = Gem::Specification.new do |s|
   s.add_runtime_dependency('suploy-api')
   s.add_runtime_dependency('netrc')
   s.add_runtime_dependency('terminal-table')
-  s.add_runtime_dependency('bazaar')
 end

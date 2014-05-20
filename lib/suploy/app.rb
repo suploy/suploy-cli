@@ -1,19 +1,37 @@
 module Suploy
   module App
     def init(app_name)
+      if app_name.nil?
+        raise ArgumentError.new "You have to provide a name for an app to be created."
+      end
       app = Suploy::Api::App.create app_name
       add_suploy_remote app.info['repository']
       puts "Initialized suploy. You can now deploy using git."
     rescue Rugged::RepositoryError
-      puts "Current directory is not a git repository, cannot initialize suploy."
+      raise Suploy::NotAGitRepository.new "Current directory is not a git repository, cannot initialize suploy."
     end
 
-    def info(app_name=suploy_app_name)
-      app = Suploy::Api::App.get app_name
+    def info
+      # Get app from suploy api
+      app = Suploy::Api::App.get suploy_app_name
+      # Format it nicely to stdout
+      puts "Name:   #{app.info['name']}\n"
+      puts "Status: #{app.info['status']}\n"
+      puts "Repo:   #{app.info['repository']}"
     end
 
     def index
+      # Get app array through suploy api
       apps = Suploy::Api::App.index
+      # Create an ascii table based on results
+      table = Terminal::Table.new
+      table.title = "Apps: #{apps.size}"
+      table.headings = ['Name', 'Status', 'Repository']
+      rows = apps.map do |a|
+        [a.info["name"], a.info["status"], a.info["repository"]]
+      end
+      # print the table to stdout
+      puts table
     end
 
     def add_suploy_remote(git_url)
@@ -34,7 +52,7 @@ module Suploy
     def suploy_remote
       @suploy_remote ||= Rugged::Remote.lookup(current_git_repo, 'suploy')
       if @suploy_remote.nil?
-        raise SuployRemoteDoesNotExist, "No suploy remote found."
+        raise Suploy::RemoteDoesNotExist.new, "No suploy remote found."
       end
       @suploy_remote
     end

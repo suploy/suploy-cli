@@ -78,22 +78,14 @@ desc 'Initialize your app'
 arg_name '[app-name]'
 command :init do |c|
   c.action do |global_options,options,args|
-    if args.size == 1
-      Suploy::App.init(args[0])
-    else
-      puts "You have to provide a name for an app to be created."
-    end
+    Suploy::App.init(args[0])
   end
 end
 
 desc 'Show information about your app'
 command :info do |c|
   c.action do |global_options,options,args|
-    app = Suploy::App.info
-    puts "App:"
-    puts "  Name: #{app.info['name']}"
-    puts "  Status: #{app.info['status']}"
-    puts "  Repo: #{app.info['repository']}"
+    Suploy::App.info
   end
 end
 
@@ -101,19 +93,7 @@ desc 'Show all apps'
 arg_name '[app-name]'
 command :apps do |c|
   c.action do |global_options,options,args|
-    apps = Suploy::App.index
-    if apps.size > 0
-      table = Terminal::Table.new do |t|
-        t << ['Name', 'Status', 'Git']
-        t.add_separator
-        apps.each do |k|
-          t << [k.info["name"], k.info["status"], k.info["repository"]]
-        end
-      end
-      puts table
-    else
-      puts "You have not created an app yet, why don't you do so..?"
-    end
+    Suploy::App.index
   end
 end
 
@@ -133,7 +113,6 @@ command :config do |c|
     add.action do |global_options,options,args|
       url = args[0]
       Suploy::Config.url = url
-      puts "Url of your suploy instace has been set to #{url}"
     end
   end
 end

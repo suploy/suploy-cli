@@ -4,7 +4,7 @@ module Suploy
   require 'netrc'
   require 'terminal-table'
   require 'yaml'
-  require 'bazaar'
+  require 'suploy/error'
   require 'suploy/api'
   require 'suploy/version'
   require 'suploy/config'

@@ -1,4 +1,5 @@
-module Suploy::Api::Error
+module Suploy::Error
   class SuployCliError < StandardError; end
-  class SuployRemoteDoesNotExist < SuployCliError; end
+  class RemoteDoesNotExist < SuployCliError; end
+  class NotAGitRepository < SuployCliError; end
 end

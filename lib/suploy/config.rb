@@ -6,6 +6,7 @@ module Suploy
 
     def url=(new_url)
       config['url'] = new_url
+      puts "Url of your suploy instace has been set to #{url}"
       write
     end
 
