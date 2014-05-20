@@ -125,6 +125,19 @@ command :login do |c|
   end
 end
 
+desc 'Configure the suploy client'
+command :config do |c|
+  c.arg_name '[url to your suploy instance]'
+  c.desc 'Configure the url to your suploy instance'
+  c.command :url do |add|
+    add.action do |global_options,options,args|
+      url = args[0]
+      Suploy::Config.url = url
+      puts "Url of your suploy instace has been set to #{url}"
+    end
+  end
+end
+
 pre do |global,command,options,args|
   Suploy::Config.load
   Suploy::Api.url = Suploy::Config.url

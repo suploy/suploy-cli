@@ -2,6 +2,7 @@ PATH
   remote: .
   specs:
     suploy (0.0.1)
+      bazaar
       gli (= 2.10.0)
       highline
       httparty
