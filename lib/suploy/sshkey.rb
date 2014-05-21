@@ -4,9 +4,9 @@ module Suploy
       key_file ||= '~/.ssh/id_rsa.pub'
       key_file = File.expand_path(key_file)
       if !(File.file? key_file)
-        raise KeyFileDoesNotExist.new "Key-file '#{key_file}' does not exist."
+        raise Suploy::Error::KeyFileDoesNotExist.new "Key-file '#{key_file}' does not exist."
       end
-      print "Adding key-file '#{key_file}' ... "
+      puts "Adding key-file '#{key_file}' ... "
       file = File.open(key_file, 'rb')
       key_content = file.read
       key_name = key_content.split.last
@@ -18,7 +18,7 @@ module Suploy
     def index
       ssh_keys = Suploy::Api::SshKey.index
       if ssh_keys.size > 0
-        raise NoSshKeysFound.new "You have not added an SSH Key yet, why don't you do so..?"
+        raise Suploy::Error::NoSshKeysFound.new "You have not added an SSH Key yet, why don't you do so..?"
       end
       table = Terminal::Table.new
       table.title = "SSH Keys: #{ssh_keys.size}"
@@ -33,7 +33,7 @@ module Suploy
       if key_name.nil?
         raise ArgumentError.new "You must provide a SSH Key name to delete."
       end
-      print "Remove key '#{key_name}' ... "
+      puts "Remove key '#{key_name}' ... "
       ssh_key = Suploy::Api::SshKey.get key_name
       ssh_key.remove
       puts "Done"

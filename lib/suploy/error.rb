@@ -4,4 +4,5 @@ module Suploy::Error
   class NotAGitRepository < SuployCliError; end
   class RemoteAlreadyExists < SuployCliError; end
   class KeyFileDoesNotExists < SuployCliError; end
+  class NoSshKeysFound < SuployCliError; end
 end
