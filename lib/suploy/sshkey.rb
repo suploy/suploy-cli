@@ -17,7 +17,7 @@ module Suploy
 
     def index
       ssh_keys = Suploy::Api::SshKey.index
-      if ssh_keys.size > 0
+      if ssh_keys.empty?
         raise Suploy::Error::NoSshKeysFound.new "You have not added an SSH Key yet, why don't you do so..?"
       end
       table = Terminal::Table.new
