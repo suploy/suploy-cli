@@ -54,7 +54,7 @@ module Suploy
     def suploy_remote
       @suploy_remote ||= Rugged::Remote.lookup(current_git_repo, 'suploy')
       if @suploy_remote.nil?
-        raise Suploy::RemoteDoesNotExist.new, "No suploy remote found."
+        raise Suploy::Error::RemoteDoesNotExist.new, "No suploy remote found."
       end
       @suploy_remote
     end
