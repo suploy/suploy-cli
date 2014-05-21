@@ -27,7 +27,7 @@ module Suploy
       table = Terminal::Table.new
       table.title = "Apps: #{apps.size}"
       table.headings = ['Name', 'Status', 'Repository']
-      rows = apps.map do |a|
+      table.rows = apps.map do |a|
         [a.info["name"], a.info["status"], a.info["repository"]]
       end
       # print the table to stdout

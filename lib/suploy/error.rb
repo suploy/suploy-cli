@@ -3,4 +3,5 @@ module Suploy::Error
   class RemoteDoesNotExist < SuployCliError; end
   class NotAGitRepository < SuployCliError; end
   class RemoteAlreadyExists < SuployCliError; end
+  class KeyFileDoesNotExists < SuployCliError; end
 end

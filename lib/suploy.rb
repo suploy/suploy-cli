@@ -9,7 +9,8 @@ module Suploy
   require 'suploy/version'
   require 'suploy/config'
   require 'suploy/util/ask'
-  require 'suploy/app'
   require 'suploy/auth'
   require 'suploy/auth/credentials'
+  require 'suploy/app'
+  require 'suploy/sshkey'
 end
