@@ -29,7 +29,15 @@ module Suploy
       @credentials
     end
 
+    def set_authorization_for(commands_requiring_auth, current_command)
+      parent_most_command = current_command.topmost_ancestor.names
+      if commands_requiring_auth.include? parent_most_command
+        token = Suploy::Auth.get_credentials.token
+        Suploy::Api.authorization token
+      end
+    end
+
     module_function :login, :ask_for_and_save_credentials,
-    :retrieve_token_from_api, :get_credentials
+    :retrieve_token_from_api, :get_credentials, :set_authorization_for
   end
 end

@@ -57,7 +57,7 @@ command :key do |c|
     end
   end
 
-  c.arg_name 'key-name'
+  c.arg_name '[key-name]'
   c.desc 'Remove a previously added SSH Key from your suploy account'
   c.command :rm do |add|
     add.action do |global_options,options,args|
@@ -78,7 +78,8 @@ desc 'Initialize your app'
 arg_name '[app-name]'
 command :init do |c|
   c.action do |global_options,options,args|
-    Suploy::App.init(args[0])
+    app_name = args[0]
+    Suploy::App.init app_name
   end
 end
 
@@ -120,13 +121,8 @@ end
 pre do |global,command,options,args|
   Suploy::Config.load
   Suploy::Api.url = Suploy::Config.url
-
-  commands_requiring_auth = ['key', 'init', 'info', 'apps']
-  parent_most_command = command.topmost_ancestor.names
-  if commands_requiring_auth.include? parent_most_command
-    token = Suploy::Auth.get_credentials.token
-    Suploy::Api.authorization token
-  end
+  commands_requiring_authentication = ['key', 'init', 'info', 'apps']
+  Suploy::Auth.set_authorization_for commands_requiring_authentication, command
   true
 end
 
