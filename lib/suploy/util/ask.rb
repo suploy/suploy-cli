@@ -3,7 +3,7 @@ module Suploy
     module Ask
       def ask_for_url
         puts "Enter your Suploy url."
-        print "URL: "
+        print "URL (eg. http://suploy.com/): "
         ask("").to_s
       end
 

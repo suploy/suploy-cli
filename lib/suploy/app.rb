@@ -6,7 +6,7 @@ module Suploy
       end
       app = Suploy::Api::App.create app_name
       add_suploy_remote app.info['repository']
-      puts "Initialized suploy. You can now deploy using git."
+      puts "Initialized suploy. You can now deploy using `git push suploy branch:master`."
     rescue Rugged::RepositoryError
       raise Suploy::NotAGitRepository.new "Current directory is not a git repository, cannot initialize suploy."
     end
