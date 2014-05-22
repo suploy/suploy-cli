@@ -99,7 +99,13 @@ post do |global,command,options,args|
 end
 
 on_error do |exception|
+  if exception.is_a? Suploy::Api::Error::UnauthorizedError
+    Suploy::Auth.ask_for_and_save_credentials
+    exit run($argv_clone.clone)
+  end
   true
 end
+
+$argv_clone = ARGV.clone
 
 exit run(ARGV)
